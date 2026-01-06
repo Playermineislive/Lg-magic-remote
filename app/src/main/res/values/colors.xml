@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="void_bg">#000000</color>
+    <color name="obsidian_surface">#050505</color>
+    
+    <color name="glass_base">#05FFFFFF</color>       <color name="glass_stroke_top">#1FFFFFFF</color> <color name="glass_stroke_bot">#08FFFFFF</color> <color name="netflix_glow">#33E50914</color>
+    <color name="netflix_border">#E50914</color>
+    
+    <color name="youtube_glow">#33FF0000</color>
+    <color name="youtube_border">#FF0000</color>
+    
+    <color name="prime_glow">#3300A8E1</color>
+    <color name="prime_border">#00A8E1</color>
+    
+    <color name="active_green">#00FF88</color>
+    <color name="power_red">#FF0055</color>
+    <color name="text_main">#F4F4F4</color>
+    <color name="text_muted">#73FFFFFF</color>
+</resources>
