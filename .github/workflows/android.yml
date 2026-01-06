@@ -1,0 +1,84 @@
+name: Android CI (LG Remote)
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - v* # Triggers release when you push a tag like v1.0
+  pull_request:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 1. Setup Java (JDK 17 is standard for Android Gradle Plugin 8.0+)
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: gradle
+
+      # 2. Setup Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant Execute Permission to gradlew
+        run: chmod +x ./gradlew
+
+      # 3. Build the APKs (Debug & Release)
+      - name: Build APKs
+        run: ./gradlew assembleDebug assembleRelease
+
+      # 4. Upload Debug APK (Always accessible)
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: LGRemote-debug
+          path: app/build/outputs/apk/debug/*.apk
+
+      # --- SIGNING SECTION (Requires GitHub Secrets) ---
+      # Only runs if you push a tag (e.g., git tag v1.0 && git push --tags)
+      
+      - name: Sign Release APK
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: kevin-david/zipalign-sign-android-release@v2
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          # You need to set these in GitHub > Settings > Secrets
+          signingKeyBase64: ${{ secrets.SIGNING_KEY_STORE }}
+          alias: ${{ secrets.SIGNING_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          zipAlign: true
+
+      - name: Rename APK with tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG=${GITHUB_REF_NAME}
+          SIGNED_APK="${{ steps.sign_app.outputs.signedReleaseFile }}"
+          # Renaming file to LGRemote-v1.0.apk
+          APK_DST="LGRemote-${TAG}.apk"
+          cp "$SIGNED_APK" "$APK_DST"
+          echo "RELEASE_APK_PATH=$APK_DST" >> $GITHUB_ENV
+
+      # 5. Create a GitHub Release automatically
+      - name: Release APK to GitHub Releases
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.RELEASE_APK_PATH }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
