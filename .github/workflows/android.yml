@@ -2,13 +2,10 @@ name: Android CI (LG Remote)
 
 on:
   push:
-    branches:
-      - "**"
-    tags:
-      - v*
+    branches: [ "**" ]
+    tags: [ "v*" ]
   pull_request:
-    branches:
-      - "**"
+    branches: [ "**" ]
   workflow_dispatch:
 
 jobs:
@@ -21,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 1. Setup Java JDK 17 (Required for Android Gradle Plugin 8.0+)
+      # 1. Setup Java 17 (Required for Android 14 / SDK 34)
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
@@ -29,7 +26,7 @@ jobs:
           distribution: temurin
 
       # 2. Setup Gradle (Fixes 'gradlew not found' error)
-      # This action installs Gradle 8.0 automatically so you don't need the wrapper file.
+      # This downloads Gradle 8.0 automatically, so we don't need the wrapper file.
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -39,7 +36,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 4. Build the APKs using 'gradle' command instead of './gradlew'
+      # 4. Build the APKs using global 'gradle' command
       - name: Build APKs
         run: gradle assembleDebug assembleRelease
 
@@ -50,7 +47,7 @@ jobs:
           name: LGRemote-debug
           path: app/build/outputs/apk/debug/*.apk
 
-      # --- SIGNING SECTION (Requires GitHub Secrets) ---
+      # --- SIGNING SECTION (Optional: Needs Secrets) ---
       - name: Sign Release APK
         if: startsWith(github.ref, 'refs/tags/')
         uses: kevin-david/zipalign-sign-android-release@v2
@@ -63,20 +60,10 @@ jobs:
           keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
           zipAlign: true
 
-      - name: Rename APK with tag
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          TAG=${GITHUB_REF_NAME}
-          SIGNED_APK="${{ steps.sign_app.outputs.signedReleaseFile }}"
-          APK_DST="LGRemote-${TAG}.apk"
-          cp "$SIGNED_APK" "$APK_DST"
-          echo "RELEASE_APK_PATH=$APK_DST" >> $GITHUB_ENV
-
       - name: Release APK to GitHub Releases
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ env.RELEASE_APK_PATH }}
-          generate_release_notes: true
+          files: ${{ steps.sign_app.outputs.signedReleaseFile }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
