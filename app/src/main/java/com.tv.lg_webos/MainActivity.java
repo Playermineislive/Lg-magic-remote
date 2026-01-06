@@ -37,7 +37,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+          // --- ADD THIS CRASH HANDLER ---
+    Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
+        new Thread(() -> {
+            android.os.Looper.prepare();
+            Toast.makeText(getApplicationContext(), "ERROR: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            android.os.Looper.loop();
+        }).start();
+        try { Thread.sleep(5000); } catch (InterruptedException x) {}
+        System.exit(1);
+    });
+    // ------------------------------
+
+    // Your existing code...
+
         // Immersive Fullscreen (Transparent Status Bar)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
