@@ -2,22 +2,22 @@
 buildscript {
     repositories {
         google()
-        mavenCentral()
+        maven { url "https://dl.google.com/dl/android/maven2/" }
     }
     dependencies {
-        // This connects the plugin. DO NOT CHANGE THIS LINE.
-        classpath 'com.android.tools.build:gradle:8.1.0'
+        // DO NOT CHANGE
+        classpath "com.android.tools.build:gradle:8.1.0"
     }
 }
 
 allprojects {
     repositories {
         google()
-        mavenCentral()
+        maven { url "https://dl.google.com/dl/android/maven2/" }
         maven { url "https://jitpack.io" }
     }
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
