@@ -1,18 +1,16 @@
 pluginManagement {
     repositories {
-        google()                 // MUST be first
+        google()
         gradlePluginPortal()
-        maven { url "https://dl.google.com/dl/android/maven2/" }
+        mavenCentral() // <--- THIS WAS MISSING
     }
 }
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()                 // MUST be first
-        maven { url "https://dl.google.com/dl/android/maven2/" }
+        google()
+        mavenCentral() // <--- THIS WAS MISSING
     }
 }
-
 rootProject.name = "LGRemoteApp"
-include(":app")
+include ':app'
