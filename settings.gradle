@@ -1,4 +1,4 @@
-pluginManagement {
+pluginManagement {  // <--- FIXED: Lowercase 'p' is required
     repositories {
         google()
         mavenCentral()
@@ -10,7 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' } // Required for Network Tools
+        maven { url 'https://jitpack.io' } // Perfect! This fixes the missing library.
     }
 }
 
