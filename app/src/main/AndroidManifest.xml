@@ -19,11 +19,13 @@
         android:usesCleartextTraffic="true"
         android:hardwareAccelerated="true">
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,5 +34,4 @@
         </activity>
 
     </application>
-
 </manifest>
