@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android' // <--- REQUIRED FOR KOTLIN
 }
 
 android {
@@ -7,7 +8,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.tv.lg_webos" // Kept standard to avoid conflicts
+        applicationId "com.tv.lg_webos"
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -15,40 +16,41 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField "boolean", "DEBUG", "true"
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "boolean", "DEBUG", "false"
         }
     }
     
+    // Enable Java 8 features (Required for new Android tools)
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     
+    // Enable Kotlin features
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    
     buildFeatures {
-        buildConfig true
+        viewBinding true // Helps with UI
     }
 }
 
 dependencies {
-    // 1. Core Android UI
+    // 1. Core Android & Kotlin
+    implementation 'androidx.core:core-ktx:1.12.0' // Kotlin Extensions
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    
-    // 2. LAYOUT ENGINE (This was missing and causing the crash!)
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     
-    // 3. Preferences
+    // 2. Preferences
     implementation 'androidx.preference:preference:1.2.1'
 
-    // 4. WebSockets
+    // 3. WebSockets (For LG TV)
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'
 
-    // 5. Network Tools
+    // 4. Network Tools
     implementation 'com.github.stealthcopter:AndroidNetworkTools:0.4.5.3' 
 }
