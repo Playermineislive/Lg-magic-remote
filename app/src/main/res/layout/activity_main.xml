@@ -1,93 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212">
+    android:orientation="vertical"
+    android:background="#000000"
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/ip_input"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="Enter TV IP (e.g. 192.168.1.50)"
         android:textColor="#FFFFFF"
-        android:textColorHint="#80FFFFFF"
-        android:background="#333333"
-        android:paddingStart="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_link"
-        android:layout_margin="16dp"/>
+        android:textColorHint="#CCCCCC"
+        android:minHeight="48dp"/>
 
     <Button
         android:id="@+id/btn_link"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CONNECT"
-        app:layout_constraintTop_toTopOf="@id/ip_input"
-        app:layout_constraintBottom_toBottomOf="@id/ip_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"/>
+        android:text="CONNECT TO TV"
+        android:layout_marginTop="10dp"/>
 
     <LinearLayout
         android:id="@+id/tab_container"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/ip_input"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
-        <TextView android:id="@+id/tab_nav" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="REMOTE" android:gravity="center" android:textColor="#FFFFFF" android:clickable="true" android:background="?android:attr/selectableItemBackground"/>
-        <TextView android:id="@+id/tab_touch" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="TOUCHPAD" android:gravity="center" android:textColor="#FFFFFF" android:clickable="true" android:background="?android:attr/selectableItemBackground"/>
-        <TextView android:id="@+id/tab_type" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="KEYBOARD" android:gravity="center" android:textColor="#FFFFFF" android:clickable="true" android:background="?android:attr/selectableItemBackground"/>
+        <Button android:id="@+id/tab_nav" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="REMOTE" android:textSize="12sp"/>
+        <Button android:id="@+id/tab_touch" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="TOUCH" android:textSize="12sp"/>
+        <Button android:id="@+id/tab_type" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="TYPE" android:textSize="12sp"/>
     </LinearLayout>
 
     <ViewFlipper
         android:id="@+id/view_flipper"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tab_container"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             
-            <Button android:id="@+id/btn_ok" android:text="OK" android:layout_width="80dp" android:layout_height="80dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
-            <Button android:id="@+id/btn_up" android:text="UP" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintBottom_toTopOf="@id/btn_ok" app:layout_constraintStart_toStartOf="@id/btn_ok" app:layout_constraintEnd_toEndOf="@id/btn_ok"/>
-            <Button android:id="@+id/btn_down" android:text="DN" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintTop_toBottomOf="@id/btn_ok" app:layout_constraintStart_toStartOf="@id/btn_ok" app:layout_constraintEnd_toEndOf="@id/btn_ok"/>
-            <Button android:id="@+id/btn_left" android:text="L" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintEnd_toStartOf="@id/btn_ok" app:layout_constraintTop_toTopOf="@id/btn_ok" app:layout_constraintBottom_toBottomOf="@id/btn_ok"/>
-            <Button android:id="@+id/btn_right" android:text="R" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintStart_toEndOf="@id/btn_ok" app:layout_constraintTop_toTopOf="@id/btn_ok" app:layout_constraintBottom_toBottomOf="@id/btn_ok"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <Button android:id="@+id/btn_vol_up" android:text="V+" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintBottom_toTopOf="@id/btn_left" app:layout_constraintEnd_toStartOf="@id/btn_up" android:layout_margin="10dp"/>
-            <Button android:id="@+id/btn_vol_down" android:text="V-" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintTop_toBottomOf="@id/btn_left" app:layout_constraintEnd_toStartOf="@id/btn_down" android:layout_margin="10dp"/>
-            <Button android:id="@+id/btn_ch_up" android:text="C+" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintBottom_toTopOf="@id/btn_right" app:layout_constraintStart_toEndOf="@id/btn_up" android:layout_margin="10dp"/>
-            <Button android:id="@+id/btn_ch_down" android:text="C-" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintTop_toBottomOf="@id/btn_right" app:layout_constraintStart_toEndOf="@id/btn_down" android:layout_margin="10dp"/>
-            
-            <Button android:id="@+id/btn_home" android:text="HOME" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_margin="20dp"/>
-            <Button android:id="@+id/btn_back" android:text="BACK" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_margin="20dp"/>
-            <Button android:id="@+id/btn_mute" android:text="MUTE" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_margin="20dp"/>
-            <Button android:id="@+id/btn_power" android:text="PWR" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_margin="20dp"/>
+                <Button android:id="@+id/btn_up" android:text="UP" android:layout_width="100dp" android:layout_height="wrap_content"/>
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <Button android:id="@+id/btn_left" android:text="LEFT" android:layout_width="90dp" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/btn_ok" android:text="OK" android:layout_width="90dp" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/btn_right" android:text="RIGHT" android:layout_width="90dp" android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <Button android:id="@+id/btn_down" android:text="DOWN" android:layout_width="100dp" android:layout_height="wrap_content"/>
 
-            <Button android:id="@+id/btn_netflix" android:text="NETFLIX" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toTopOf="@id/btn_home" app:layout_constraintStart_toStartOf="parent" android:layout_margin="20dp"/>
-            <Button android:id="@+id/btn_youtube" android:text="YOUTUBE" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toTopOf="@id/btn_back" app:layout_constraintEnd_toEndOf="parent" android:layout_margin="20dp"/>
+                <View android:layout_width="match_parent" android:layout_height="20dp"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <Button android:id="@+id/btn_vol_up" android:text="VOL +" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/btn_ch_up" android:text="CH +" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <Button android:id="@+id/btn_vol_down" android:text="VOL -" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content"/>
+                    <Button android:id="@+id/btn_ch_down" android:text="CH -" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <Button android:id="@+id/btn_mute" android:text="MUTE" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/btn_home" android:text="HOME" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/btn_back" android:text="BACK" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/btn_power" android:text="POWER OFF" android:layout_width="match_parent" android:layout_height="wrap_content" android:backgroundTint="#FF0000"/>
+
+                <Button android:id="@+id/btn_netflix" android:text="NETFLIX" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                <Button android:id="@+id/btn_youtube" android:text="YOUTUBE" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </ScrollView>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#222222">
-            
+            android:background="#333333">
             <View
                 android:id="@+id/touch_pad_surface"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:background="#333333"/>
-                
-            <TextView android:text="Touchpad Surface" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:textColor="#555"/>
+                android:layout_height="match_parent"/>
+            <TextView android:text="TOUCHPAD AREA" android:layout_gravity="center" android:textColor="#FFFFFF"/>
         </FrameLayout>
 
         <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
@@ -95,5 +96,4 @@
         </FrameLayout>
 
     </ViewFlipper>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
