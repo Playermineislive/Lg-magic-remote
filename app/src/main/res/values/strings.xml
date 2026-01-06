@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LG Remote</string>
+    <string name="wifi_not_connected">Wi-Fi is not connected</string>
 </resources>
