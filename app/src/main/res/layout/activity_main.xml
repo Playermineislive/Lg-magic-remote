@@ -1,79 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:orientation="vertical"
+    android:background="#121212"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+
+        <EditText
+            android:id="@+id/ip_input"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:hint="TV IP (e.g. 192.168.1.50)"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:background="#2C2C2C"
+            android:paddingStart="12dp"
+            android:inputType="number|datetime"/>
+
+        <Button
+            android:id="@+id/btn_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="LINK"
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="10dp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
-        android:gravity="center_horizontal">
+        android:gravity="center">
 
-        <EditText
-            android:id="@+id/ip_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter TV IP Address"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#888888"
-            android:minHeight="48dp"
-            android:inputType="number|datetime"/>
-
-        <Button
-            android:id="@+id/btn_link"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="CONNECT TO TV"
-            android:textSize="18sp"
-            android:layout_marginTop="10dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="REMOTE CONTROL"
-            android:textColor="#00FF00"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"/>
-
-        <Button android:id="@+id/btn_up" android:text="UP" android:layout_width="120dp" android:layout_height="60dp"/>
-        
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
-            <Button android:id="@+id/btn_left" android:text="LEFT" android:layout_width="100dp" android:layout_height="60dp"/>
-            <Button android:id="@+id/btn_ok" android:text="OK" android:layout_width="100dp" android:layout_height="60dp"/>
-            <Button android:id="@+id/btn_right" android:text="RIGHT" android:layout_width="100dp" android:layout_height="60dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="70dp" android:orientation="horizontal">
+            <Button android:id="@+id/btn_vol_up" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="VOL+" android:backgroundTint="#333333" android:layout_margin="4dp"/>
+            <Button android:id="@+id/btn_up"     android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="▲"   android:backgroundTint="#444444" android:layout_margin="4dp" android:textSize="20sp"/>
+            <Button android:id="@+id/btn_ch_up"  android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="CH+"  android:backgroundTint="#333333" android:layout_margin="4dp"/>
         </LinearLayout>
 
-        <Button android:id="@+id/btn_down" android:text="DOWN" android:layout_width="120dp" android:layout_height="60dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="30dp">
-            
-            <Button android:id="@+id/btn_vol_up" android:text="VOL +" android:layout_weight="1" android:layout_width="0dp" android:layout_height="60dp"/>
-            <Button android:id="@+id/btn_ch_up" android:text="CH +" android:layout_weight="1" android:layout_width="0dp" android:layout_height="60dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="70dp" android:orientation="horizontal">
+            <Button android:id="@+id/btn_left"   android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="◀"   android:backgroundTint="#444444" android:layout_margin="4dp" android:textSize="20sp"/>
+            <Button android:id="@+id/btn_enter"  android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="OK"  android:backgroundTint="#D32F2F" android:layout_margin="4dp" android:textStyle="bold"/>
+            <Button android:id="@+id/btn_right"  android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="▶"   android:backgroundTint="#444444" android:layout_margin="4dp" android:textSize="20sp"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            
-            <Button android:id="@+id/btn_vol_down" android:text="VOL -" android:layout_weight="1" android:layout_width="0dp" android:layout_height="60dp"/>
-            <Button android:id="@+id/btn_ch_down" android:text="CH -" android:layout_weight="1" android:layout_width="0dp" android:layout_height="60dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="70dp" android:orientation="horizontal">
+            <Button android:id="@+id/btn_vol_down" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="VOL-" android:backgroundTint="#333333" android:layout_margin="4dp"/>
+            <Button android:id="@+id/btn_down"     android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="▼"   android:backgroundTint="#444444" android:layout_margin="4dp" android:textSize="20sp"/>
+            <Button android:id="@+id/btn_ch_down"  android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="CH-"  android:backgroundTint="#333333" android:layout_margin="4dp"/>
         </LinearLayout>
 
-        <Button android:id="@+id/btn_mute" android:text="MUTE" android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginTop="20dp"/>
-        <Button android:id="@+id/btn_home" android:text="HOME" android:layout_width="match_parent" android:layout_height="60dp"/>
-        <Button android:id="@+id/btn_back" android:text="BACK" android:layout_width="match_parent" android:layout_height="60dp"/>
-        
-        <Button android:id="@+id/btn_netflix" android:text="NETFLIX" android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginTop="20dp"/>
-        <Button android:id="@+id/btn_youtube" android:text="YOUTUBE" android:layout_width="match_parent" android:layout_height="60dp"/>
-        
-        <Button android:id="@+id/btn_power" android:text="POWER OFF" android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginTop="20dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:layout_marginTop="10dp">
+            <Button android:id="@+id/btn_back" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="BACK" android:backgroundTint="#222222" android:layout_margin="4dp"/>
+            <Button android:id="@+id/btn_home" android:layout_weight="1" android:layout_width="0dp" android:layout_height="match_parent" android:text="HOME" android:backgroundTint="#222222" android:layout_margin="4dp"/>
+        </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TRACKPAD (Touch Here)"
+        android:textColor="#666666"
+        android:layout_marginTop="20dp"
+        android:gravity="center"/>
+
+    <View
+        android:id="@+id/trackpad_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#1E1E1E"
+        android:layout_marginTop="5dp"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>
