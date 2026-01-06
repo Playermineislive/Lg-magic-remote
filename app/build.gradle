@@ -7,7 +7,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.tv.lg_webos"
+        applicationId "com.tv.lgiwebos"
         minSdk 24
         targetSdk 34
         versionCode 1
