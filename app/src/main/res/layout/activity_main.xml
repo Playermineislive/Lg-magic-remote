@@ -4,159 +4,96 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0A0E14" 
-    android:padding="24dp">
+    android:background="#121212">
+
+    <EditText
+        android:id="@+id/ip_input"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Enter TV IP (e.g. 192.168.1.50)"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#80FFFFFF"
+        android:background="#333333"
+        android:paddingStart="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_link"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/btn_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONNECT"
+        app:layout_constraintTop_toTopOf="@id/ip_input"
+        app:layout_constraintBottom_toBottomOf="@id/ip_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"/>
 
     <LinearLayout
-        android:id="@+id/header_bar"
+        android:id="@+id/tab_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="@drawable/bg_glass_panel"
-        android:padding="12dp"
-        android:gravity="center_vertical"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/ip_input"
+        android:layout_marginTop="10dp">
 
-        <EditText
-            android:id="@+id/ip_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="192.168.1.10"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#556677"
-            android:textSize="14sp"
-            android:background="@null"/>
-
-        <ImageView
-            android:id="@+id/btn_link"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@android:drawable/ic_menu_rotate"
-            app:tint="#00FF88"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+        <TextView android:id="@+id/tab_nav" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="REMOTE" android:gravity="center" android:textColor="#FFFFFF" android:clickable="true" android:background="?android:attr/selectableItemBackground"/>
+        <TextView android:id="@+id/tab_touch" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="TOUCHPAD" android:gravity="center" android:textColor="#FFFFFF" android:clickable="true" android:background="?android:attr/selectableItemBackground"/>
+        <TextView android:id="@+id/tab_type" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="KEYBOARD" android:gravity="center" android:textColor="#FFFFFF" android:clickable="true" android:background="?android:attr/selectableItemBackground"/>
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/btn_power"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@android:drawable/ic_lock_power_off"
-        app:tint="#FF3355"
-        android:background="@drawable/bg_circle_glass"
-        app:layout_constraintTop_toBottomOf="@id/header_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
 
     <ViewFlipper
         android:id="@+id/view_flipper"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginVertical="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_power"
-        app:layout_constraintBottom_toTopOf="@id/bottom_dock">
+        app:layout_constraintTop_toBottomOf="@id/tab_container"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <View
-                android:id="@+id/dpad_bg"
-                android:layout_width="220dp"
-                android:layout_height="220dp"
-                android:background="@drawable/bg_circle_glass"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="0.3"/>
-
-            <ImageButton android:id="@+id/btn_up" android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/arrow_up_float" app:tint="#FFF" android:background="@null" app:layout_constraintTop_toTopOf="@id/dpad_bg" app:layout_constraintStart_toStartOf="@id/dpad_bg" app:layout_constraintEnd_toEndOf="@id/dpad_bg" android:layout_marginTop="10dp"/>
-            <ImageButton android:id="@+id/btn_down" android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/arrow_down_float" app:tint="#FFF" android:background="@null" app:layout_constraintBottom_toBottomOf="@id/dpad_bg" app:layout_constraintStart_toStartOf="@id/dpad_bg" app:layout_constraintEnd_toEndOf="@id/dpad_bg" android:layout_marginBottom="10dp"/>
-            <ImageButton android:id="@+id/btn_left" android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/ic_media_previous" app:tint="#FFF" android:background="@null" app:layout_constraintStart_toStartOf="@id/dpad_bg" app:layout_constraintTop_toTopOf="@id/dpad_bg" app:layout_constraintBottom_toBottomOf="@id/dpad_bg" android:layout_marginLeft="10dp"/>
-            <ImageButton android:id="@+id/btn_right" android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/ic_media_next" app:tint="#FFF" android:background="@null" app:layout_constraintEnd_toEndOf="@id/dpad_bg" app:layout_constraintTop_toTopOf="@id/dpad_bg" app:layout_constraintBottom_toBottomOf="@id/dpad_bg" android:layout_marginRight="10dp"/>
             
-            <ImageButton 
-                android:id="@+id/btn_ok" 
-                android:layout_width="70dp" 
-                android:layout_height="70dp" 
-                android:background="@drawable/bg_circle_accent"
-                android:src="@android:drawable/ic_input_add"
-                app:tint="#000"
-                app:layout_constraintTop_toTopOf="@id/dpad_bg"
-                app:layout_constraintBottom_toBottomOf="@id/dpad_bg"
-                app:layout_constraintStart_toStartOf="@id/dpad_bg"
-                app:layout_constraintEnd_toEndOf="@id/dpad_bg"/>
+            <Button android:id="@+id/btn_ok" android:text="OK" android:layout_width="80dp" android:layout_height="80dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
+            <Button android:id="@+id/btn_up" android:text="UP" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintBottom_toTopOf="@id/btn_ok" app:layout_constraintStart_toStartOf="@id/btn_ok" app:layout_constraintEnd_toEndOf="@id/btn_ok"/>
+            <Button android:id="@+id/btn_down" android:text="DN" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintTop_toBottomOf="@id/btn_ok" app:layout_constraintStart_toStartOf="@id/btn_ok" app:layout_constraintEnd_toEndOf="@id/btn_ok"/>
+            <Button android:id="@+id/btn_left" android:text="L" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintEnd_toStartOf="@id/btn_ok" app:layout_constraintTop_toTopOf="@id/btn_ok" app:layout_constraintBottom_toBottomOf="@id/btn_ok"/>
+            <Button android:id="@+id/btn_right" android:text="R" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintStart_toEndOf="@id/btn_ok" app:layout_constraintTop_toTopOf="@id/btn_ok" app:layout_constraintBottom_toBottomOf="@id/btn_ok"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/dpad_bg"
-                android:layout_marginTop="40dp">
+            <Button android:id="@+id/btn_vol_up" android:text="V+" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintBottom_toTopOf="@id/btn_left" app:layout_constraintEnd_toStartOf="@id/btn_up" android:layout_margin="10dp"/>
+            <Button android:id="@+id/btn_vol_down" android:text="V-" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintTop_toBottomOf="@id/btn_left" app:layout_constraintEnd_toStartOf="@id/btn_down" android:layout_margin="10dp"/>
+            <Button android:id="@+id/btn_ch_up" android:text="C+" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintBottom_toTopOf="@id/btn_right" app:layout_constraintStart_toEndOf="@id/btn_up" android:layout_margin="10dp"/>
+            <Button android:id="@+id/btn_ch_down" android:text="C-" android:layout_width="60dp" android:layout_height="60dp" app:layout_constraintTop_toBottomOf="@id/btn_right" app:layout_constraintStart_toEndOf="@id/btn_down" android:layout_margin="10dp"/>
+            
+            <Button android:id="@+id/btn_home" android:text="HOME" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_margin="20dp"/>
+            <Button android:id="@+id/btn_back" android:text="BACK" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_margin="20dp"/>
+            <Button android:id="@+id/btn_mute" android:text="MUTE" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_margin="20dp"/>
+            <Button android:id="@+id/btn_power" android:text="PWR" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_margin="20dp"/>
 
-                <LinearLayout android:orientation="vertical" android:background="@drawable/bg_capsule_glass" android:padding="4dp">
-                    <ImageButton android:id="@+id/btn_vol_up" android:layout_width="50dp" android:layout_height="50dp" android:src="@android:drawable/ic_input_add" app:tint="#FFF" android:background="@null"/>
-                    <TextView android:text="VOL" android:textColor="#8899AA" android:textSize="10sp" android:gravity="center" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-                    <ImageButton android:id="@+id/btn_vol_down" android:layout_width="50dp" android:layout_height="50dp" android:src="@android:drawable/ic_delete" app:tint="#FFF" android:background="@null"/>
-                </LinearLayout>
-
-                <Space android:layout_width="40dp" android:layout_height="1dp"/>
-                
-                <LinearLayout android:orientation="vertical">
-                    <ImageButton android:id="@+id/btn_mute" android:layout_width="50dp" android:layout_height="50dp" android:src="@android:drawable/ic_lock_silent_mode" app:tint="#FFCC00" android:background="@drawable/bg_circle_glass" android:layout_marginBottom="16dp"/>
-                    <ImageButton android:id="@+id/btn_home" android:layout_width="50dp" android:layout_height="50dp" android:src="@android:drawable/ic_dialog_info" app:tint="#00AAFF" android:background="@drawable/bg_circle_glass"/>
-                </LinearLayout>
-
-                <Space android:layout_width="40dp" android:layout_height="1dp"/>
-
-                <LinearLayout android:orientation="vertical" android:background="@drawable/bg_capsule_glass" android:padding="4dp">
-                    <ImageButton android:id="@+id/btn_ch_up" android:layout_width="50dp" android:layout_height="50dp" android:src="@android:drawable/arrow_up_float" app:tint="#FFF" android:background="@null"/>
-                    <TextView android:text="CH" android:textColor="#8899AA" android:textSize="10sp" android:gravity="center" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-                    <ImageButton android:id="@+id/btn_ch_down" android:layout_width="50dp" android:layout_height="50dp" android:src="@android:drawable/arrow_down_float" app:tint="#FFF" android:background="@null"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" app:layout_constraintBottom_toBottomOf="parent">
-                <Button android:id="@+id/btn_netflix" android:layout_width="100dp" android:layout_height="40dp" android:text="NETFLIX" android:textColor="#FFF" android:backgroundTint="#D81F26" android:layout_marginEnd="10dp"/>
-                <Button android:id="@+id/btn_youtube" android:layout_width="100dp" android:layout_height="40dp" android:text="YouTube" android:textColor="#FFF" android:backgroundTint="#FF0000"/>
-            </LinearLayout>
+            <Button android:id="@+id/btn_netflix" android:text="NETFLIX" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toTopOf="@id/btn_home" app:layout_constraintStart_toStartOf="parent" android:layout_margin="20dp"/>
+            <Button android:id="@+id/btn_youtube" android:text="YOUTUBE" android:layout_width="wrap_content" android:layout_height="wrap_content" app:layout_constraintBottom_toTopOf="@id/btn_back" app:layout_constraintEnd_toEndOf="parent" android:layout_margin="20dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#222222">
+            
             <View
                 android:id="@+id/touch_pad_surface"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_glass_panel"
-                android:layout_margin="10dp"/>
-            <TextView android:text="Touchpad Surface" android:layout_gravity="center" android:textColor="#33FFFFFF" android:textStyle="bold" android:textSize="20sp"/>
+                android:layout_margin="20dp"
+                android:background="#333333"/>
+                
+            <TextView android:text="Touchpad Surface" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:textColor="#555"/>
         </FrameLayout>
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:orientation="vertical">
-             <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Type here..." android:textColor="#FFF"/>
-             <Button android:text="SEND TEXT" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        </LinearLayout>
+        <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+             <TextView android:text="Keyboard Input" android:layout_gravity="center" android:textColor="#FFF"/>
+        </FrameLayout>
+
     </ViewFlipper>
-
-    <LinearLayout
-        android:id="@+id/bottom_dock"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/bg_glass_panel"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageButton android:id="@+id/btn_back" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:src="@android:drawable/ic_menu_revert" app:tint="#FFF" android:background="?attr/selectableItemBackgroundBorderless"/>
-        <View android:layout_width="1dp" android:layout_height="20dp" android:background="#22FFFFFF"/>
-        
-        <ImageView android:id="@+id/tab_nav" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:src="@android:drawable/ic_menu_directions" app:tint="@color/selector_tab_color" android:padding="14dp"/>
-        <ImageView android:id="@+id/tab_touch" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:src="@android:drawable/ic_menu_zoom" app:tint="@color/selector_tab_color" android:padding="14dp"/>
-        <ImageView android:id="@+id/tab_type" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:src="@android:drawable/ic_menu_edit" app:tint="@color/selector_tab_color" android:padding="14dp"/>
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
