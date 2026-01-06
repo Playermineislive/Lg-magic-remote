@@ -1,38 +1,42 @@
-name: Debug Build
+name: Android CI (LG Remote)
 
 on:
   push:
     branches: [ "**" ]
+  pull_request:
 
 jobs:
-  debug-structure:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # THIS IS THE KEY STEP
-      - name: List Files
-        run: |
-          echo "Listing Root Directory:"
-          ls -la
-          echo "-----------------------"
-          echo "Listing App Directory (if it exists):"
-          ls -la app || echo "App folder not found!"
-          echo "-----------------------"
-          echo "Recursive List (First 3 levels):"
-          ls -R | grep ":$" | head -n 20
-
-      - name: Setup Java
+      # 1. Setup Java 17 (Required for Android 14)
+      - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
+          java-version: "17"
           distribution: temurin
-          java-version: 17
 
+      # 2. Install Gradle 8.2 (Bypasses wrapper issues)
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: "8.2"
 
-      - name: Build APK
+      # 3. Setup Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 4. Build the App
+      - name: Build Debug APK
         run: gradle assembleDebug
+
+      # 5. Save the APK so you can download it
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: LGRemote-debug
+          path: app/build/outputs/apk/debug/*.apk
