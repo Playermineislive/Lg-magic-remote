@@ -11,43 +11,41 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 1. Setup Java 17 (Required for Android 14 / SDK 34)
-      - name: Setup Java JDK
+      # 1️⃣ Java 17 (Required for AGP 8.x)
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
           distribution: temurin
+          java-version: "17"
+          cache: gradle   # 🔥 VERY IMPORTANT
 
-      # 2. Setup Gradle (Fixes 'gradlew not found' error)
-      # This downloads Gradle 8.0 automatically, so we don't need the wrapper file.
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.2
-
-      # 3. Setup Android SDK
+      # 2️⃣ Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 4. Build the APKs using global 'gradle' command
-      - name: Build APKs
-        run: gradle assembleDebug assembleRelease
+      # 3️⃣ Grant Gradle Wrapper permission
+      - name: Grant execute permission
+        run: chmod +x gradlew
 
-      # 5. Upload Debug APK
+      # 4️⃣ Build APKs (USE WRAPPER)
+      - name: Build APKs
+        run: ./gradlew assembleDebug assembleRelease --no-daemon
+
+      # 5️⃣ Upload Debug APK
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: LGRemote-debug
           path: app/build/outputs/apk/debug/*.apk
 
-      # --- SIGNING SECTION (Optional: Needs Secrets) ---
+      # 6️⃣ Sign Release APK (Only on tags)
       - name: Sign Release APK
         if: startsWith(github.ref, 'refs/tags/')
         uses: kevin-david/zipalign-sign-android-release@v2
@@ -60,6 +58,7 @@ jobs:
           keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
           zipAlign: true
 
+      # 7️⃣ GitHub Release
       - name: Release APK to GitHub Releases
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
