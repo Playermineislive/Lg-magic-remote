@@ -14,9 +14,9 @@ import android.widget.ViewFlipper;
 
 public class MainActivity extends AppCompatActivity {
 
-    // --- 1. CRITICAL VARIABLES ---
-    public static boolean m_debugMode = true; // Fixes "cannot find symbol" error
-    
+    // Fixes "cannot find symbol" error
+    public static boolean m_debugMode = true;
+
     private LGTV mTv;
     private ViewFlipper viewFlipper;
     private EditText ipInput;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // --- 2. CRASH PROTECTION: Safe Layout Loading ---
+        // --- SAFE LAYOUT LOADING ---
         try {
             // Fullscreen mode
             getWindow().setFlags(
@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
             );
             setContentView(R.layout.activity_main);
         } catch (Exception e) {
-            // If XML is broken, show error but DO NOT CRASH
-            Toast.makeText(this, "Error loading layout: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // If XML fails, show error instead of crashing
+            Toast.makeText(this, "Layout Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
             return; 
         }
@@ -56,17 +56,16 @@ public class MainActivity extends AppCompatActivity {
         mTv = new LGTV(this);
         mTv.loadMainPreferences();
 
-        // Setup the Interface
         setupUI();
     }
 
     private void setupUI() {
-        // --- 3. SAFE UI SETUP (Checks if views exist first) ---
+        // --- SAFE UI SETUP (Checks if views exist first) ---
         
         viewFlipper = findViewById(R.id.view_flipper);
         ipInput = findViewById(R.id.ip_input);
 
-        // Only set text if ipInput was found in the XML
+        // Only set text if ipInput was found
         if (ipInput != null && mTv.getMyIP() != null) {
             ipInput.setText(mTv.getMyIP());
         }
@@ -120,23 +119,16 @@ public class MainActivity extends AppCompatActivity {
         setupTouchpad();
     }
 
-    // Helper to safely set up tabs
     private void setupTab(int id, int childIndex) {
         View tab = findViewById(id);
         if (tab == null) return; // Skip if missing
 
         tab.setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            
-            // Unselect all tabs safely
             resetTab(R.id.tab_nav);
             resetTab(R.id.tab_touch);
             resetTab(R.id.tab_type);
-            
-            // Select clicked tab
             v.setSelected(true);
-            
-            // Switch view
             if (viewFlipper != null) viewFlipper.setDisplayedChild(childIndex);
         });
     }
@@ -146,10 +138,9 @@ public class MainActivity extends AppCompatActivity {
         if (v != null) v.setSelected(false);
     }
 
-    // Helper to safely set up buttons
     private void setupButton(int id, String logName, KEY_INDEX key) {
         View btn = findViewById(id);
-        if (btn == null) return; // Skip if missing (Prevents Crash!)
+        if (btn == null) return; // Skip if missing (Prevents Crash)
 
         btn.setOnClickListener(v -> {
             animateButton(v);
@@ -157,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Animation for button clicks
     private void animateButton(View v) {
         v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(50)
@@ -166,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
             .start();
     }
 
-    // Touchpad Logic
     @SuppressLint("ClickableViewAccessibility")
     private void setupTouchpad() {
         View pad = findViewById(R.id.touch_pad_surface);
