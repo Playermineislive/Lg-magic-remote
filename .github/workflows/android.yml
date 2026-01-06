@@ -3,66 +3,38 @@ name: Android CI (LG Remote)
 on:
   push:
     branches: [ "**" ]
-    tags: [ "v*" ]
   pull_request:
-    branches: [ "**" ]
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      # 1️⃣ Java 17 (Required for AGP 8.x)
-      - name: Setup Java
+      - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
           java-version: "17"
-          cache: gradle   # 🔥 VERY IMPORTANT
+          distribution: temurin
 
-      # 2️⃣ Android SDK
+      # This step installs Gradle 8.2 automatically
+      # So you don't need the 'gradlew' file!
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: "8.2"
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 3️⃣ Grant Gradle Wrapper permission
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      # 4️⃣ Build APKs (USE WRAPPER)
+      # Note: We use 'gradle' command, not './gradlew'
       - name: Build APKs
-        run: ./gradlew assembleDebug assembleRelease --no-daemon
+        run: gradle assembleDebug
 
-      # 5️⃣ Upload Debug APK
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: LGRemote-debug
           path: app/build/outputs/apk/debug/*.apk
-
-      # 6️⃣ Sign Release APK (Only on tags)
-      - name: Sign Release APK
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: kevin-david/zipalign-sign-android-release@v2
-        id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY_STORE }}
-          alias: ${{ secrets.SIGNING_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          zipAlign: true
-
-      # 7️⃣ GitHub Release
-      - name: Release APK to GitHub Releases
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${{ steps.sign_app.outputs.signedReleaseFile }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
