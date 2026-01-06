@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.tv.lg_webos'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.tv.lg_webos" // Kept standard to avoid conflicts
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "DEBUG", "true"
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "DEBUG", "false"
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+dependencies {
+    // 1. Core Android UI
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    
+    // 2. LAYOUT ENGINE (This was missing and causing the crash!)
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    
+    // 3. Preferences
+    implementation 'androidx.preference:preference:1.2.1'
+
+    // 4. WebSockets
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+
+    // 5. Network Tools
+    implementation 'com.github.stealthcopter:AndroidNetworkTools:0.4.5.3' 
+}
