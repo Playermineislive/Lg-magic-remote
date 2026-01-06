@@ -2,14 +2,14 @@ pluginManagement {
     repositories {
         google()
         gradlePluginPortal()
-        mavenCentral() // <--- THIS WAS MISSING
+        mavenCentral()  // <--- FIXED: Downloads missing tools
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        mavenCentral() // <--- THIS WAS MISSING
+        mavenCentral()  // <--- FIXED: Downloads dependencies
     }
 }
 rootProject.name = "LGRemoteApp"
