@@ -14,19 +14,15 @@ import android.widget.ViewFlipper;
 
 public class MainActivity extends AppCompatActivity {
 
-    // --- CRITICAL FIX: This variable was missing ---
     public static boolean m_debugMode = true;
-    // -----------------------------------------------
-
     private LGTV mTv;
     private ViewFlipper viewFlipper;
     private EditText ipInput;
     
-    // Touchpad Variables
+    // Touchpad variables
     private float lastX, lastY, scrollX, scrollY;
     private boolean isMoving = false;
 
-    // Command Index mapping
     public enum KEY_INDEX {
         TV, YOUTUBE, NETFLIX, AMAZON, INTERNET,
         ON, OFF, SOURCE, MUTE, VOLUME_INCREASE, VOLUME_DECREASE,
@@ -37,58 +33,59 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-          // --- ADD THIS CRASH HANDLER ---
-    Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
-        new Thread(() -> {
-            android.os.Looper.prepare();
-            Toast.makeText(getApplicationContext(), "ERROR: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            android.os.Looper.loop();
-        }).start();
-        try { Thread.sleep(5000); } catch (InterruptedException x) {}
-        System.exit(1);
-    });
-    // ------------------------------
-
-    // Your existing code...
-
-        // Immersive Fullscreen (Transparent Status Bar)
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        );
         
-        setContentView(R.layout.activity_main);
+        // 1. Try to set the layout. If this fails, the XML is broken.
+        try {
+            getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            );
+            setContentView(R.layout.activity_main);
+        } catch (Exception e) {
+            Toast.makeText(this, "CRASH: Layout file is broken!", Toast.LENGTH_LONG).show();
+            return; // Stop here to prevent crash
+        }
 
-        // Initialize Backend
+        // 2. Initialize Backend
         mTv = new LGTV(this);
         mTv.loadMainPreferences();
 
+        // 3. Setup UI safely
         setupUI();
     }
 
     private void setupUI() {
-        // --- Header & Connection ---
+        // --- SAFE CHECK: Main Views ---
         viewFlipper = findViewById(R.id.view_flipper);
         ipInput = findViewById(R.id.ip_input);
 
-        if (mTv.getMyIP() != null) ipInput.setText(mTv.getMyIP());
+        // If XML is wrong, ipInput might be null. We check before using it.
+        if (ipInput != null && mTv.getMyIP() != null) {
+            ipInput.setText(mTv.getMyIP());
+        }
 
-        findViewById(R.id.btn_link).setOnClickListener(v -> {
-            animateButton(v);
-            String ip = ipInput.getText().toString();
-            mTv.setMyIP(ip);
-            mTv.saveIPPreference();
-            mTv.TV_Pairing();
-            Toast.makeText(this, "Searching for " + ip + "...", Toast.LENGTH_SHORT).show();
-        });
+        View btnLink = findViewById(R.id.btn_link);
+        if (btnLink != null) {
+            btnLink.setOnClickListener(v -> {
+                animateButton(v);
+                if (ipInput != null) {
+                    String ip = ipInput.getText().toString();
+                    mTv.setMyIP(ip);
+                    mTv.saveIPPreference();
+                    mTv.TV_Pairing();
+                    Toast.makeText(this, "Connecting to " + ip, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
-        // --- Tabs (Neon Switcher) ---
+        // --- Tabs ---
         setupTab(R.id.tab_nav, 0);
         setupTab(R.id.tab_touch, 1);
         setupTab(R.id.tab_type, 2);
         
-        // Default Tab
-        findViewById(R.id.tab_nav).setSelected(true);
+        // Default selection
+        View tabNav = findViewById(R.id.tab_nav);
+        if (tabNav != null) tabNav.setSelected(true);
 
         // --- Navigation Keys ---
         setupButton(R.id.btn_ok, "ENTER", KEY_INDEX.ENTER);
@@ -107,89 +104,78 @@ public class MainActivity extends AppCompatActivity {
         setupButton(R.id.btn_back, "BACK", KEY_INDEX.BACK);
         setupButton(R.id.btn_power, "POWER", KEY_INDEX.ON);
 
-        // --- App Shortcuts ---
         setupButton(R.id.btn_netflix, "NETFLIX", KEY_INDEX.NETFLIX);
         setupButton(R.id.btn_youtube, "YOUTUBE", KEY_INDEX.YOUTUBE);
 
-        // --- Touchpad Logic ---
         setupTouchpad();
     }
 
     private void setupTab(int id, int childIndex) {
         View tab = findViewById(id);
+        if (tab == null) return; // Skip if missing
+
         tab.setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             
-            // Reset all tabs
-            findViewById(R.id.tab_nav).setSelected(false);
-            findViewById(R.id.tab_touch).setSelected(false);
-            findViewById(R.id.tab_type).setSelected(false);
+            // Clear other tabs
+            resetTab(R.id.tab_nav);
+            resetTab(R.id.tab_touch);
+            resetTab(R.id.tab_type);
             
-            // Select new
             v.setSelected(true);
-            viewFlipper.setDisplayedChild(childIndex);
+            if (viewFlipper != null) viewFlipper.setDisplayedChild(childIndex);
         });
+    }
+
+    private void resetTab(int id) {
+        View v = findViewById(id);
+        if (v != null) v.setSelected(false);
     }
 
     private void setupButton(int id, String logName, KEY_INDEX key) {
         View btn = findViewById(id);
-        if (btn == null) return;
+        if (btn == null) {
+            // DEBUG: Log if a button is missing from XML
+            System.out.println("Warning: Button " + id + " missing in XML");
+            return; 
+        }
         btn.setOnClickListener(v -> {
             animateButton(v);
             mTv.send_key(logName, key);
         });
     }
 
-    // --- "World Best" Animation Engine ---
     private void animateButton(View v) {
         v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        v.animate()
-            .scaleX(0.9f).scaleY(0.9f)
-            .setDuration(50)
+        v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(50)
             .setInterpolator(new AccelerateDecelerateInterpolator())
-            .withEndAction(() -> 
-                v.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
-            )
+            .withEndAction(() -> v.animate().scaleX(1f).scaleY(1f).setDuration(100).start())
             .start();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupTouchpad() {
         View pad = findViewById(R.id.touch_pad_surface);
-        if (pad == null) return;
+        if (pad == null) return; // Skip if missing
         
         pad.setOnTouchListener((v, event) -> {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                    lastX = event.getX();
-                    lastY = event.getY();
-                    isMoving = false;
+                    lastX = event.getX(); lastY = event.getY(); isMoving = false;
                     return true;
-
                 case MotionEvent.ACTION_POINTER_DOWN:
-                    if (event.getPointerCount() == 2) {
-                        scrollX = event.getX(0);
-                        scrollY = event.getY(0);
-                    }
+                    if (event.getPointerCount() == 2) { scrollX = event.getX(0); scrollY = event.getY(0); }
                     return true;
-
                 case MotionEvent.ACTION_MOVE:
                     isMoving = true;
                     if (event.getPointerCount() == 1) {
-                        int dx = (int)(event.getX() - lastX);
-                        int dy = (int)(event.getY() - lastY);
-                        mTv.movePointer(dx, dy);
-                        lastX = event.getX();
-                        lastY = event.getY();
+                        mTv.movePointer((int)(event.getX() - lastX), (int)(event.getY() - lastY));
+                        lastX = event.getX(); lastY = event.getY();
                     } else if (event.getPointerCount() == 2) {
-                        int dx = (int)((event.getX(0) - scrollX) / 2);
-                        int dy = (int)((event.getY(0) - scrollY) / 2);
-                        mTv.scroll(dx, dy);
-                        scrollX = event.getX(0);
-                        scrollY = event.getY(0);
+                        mTv.scroll((int)((event.getX(0) - scrollX) / 2), (int)((event.getY(0) - scrollY) / 2));
+                        scrollX = event.getX(0); scrollY = event.getY(0);
                     }
                     return true;
-
                 case MotionEvent.ACTION_UP:
                     if (!isMoving) {
                         v.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
